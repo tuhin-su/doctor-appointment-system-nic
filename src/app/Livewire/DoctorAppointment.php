@@ -4,10 +4,10 @@ namespace App\Livewire;
 
 use Livewire\Component;
 
-class SideBar extends Component
+class DoctorAppointment extends Component
 {
     public function render()
     {
-        return view('livewire.side-bar');
+        return view('livewire.doctor-appointment');
     }
 }

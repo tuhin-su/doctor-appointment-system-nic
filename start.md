@@ -3,6 +3,11 @@ php-fpm
 php artisan key:generate
 php artisan session:table
 php artisan migrate
+php artisan view:clear
+php artisan config:clear
+php artisan cache:clear
+php artisan livewire:discover
+
 php artisan serve --host=0.0.0.0 --port=8000
 
 
@@ -18,3 +23,4 @@ php artisan code:models <Table>
 
 
 # USer Model to be extend class User extends Authenticatable
+use Illuminate\Foundation\Auth\User as Authenticatable;

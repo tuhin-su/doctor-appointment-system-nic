@@ -1,27 +1,39 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PageController extends Controller
 {
     public function root()
     {
-        return view('index', ['currentComponent' => 'login']); // Show login by default at "/"
+        return view('index', ['currentComponent' => 'login']);
     }
-    
+
     public function index(Request $request)
     {
-        //? Match the route parameter to a specific Livewire component
-        $component = match($request->route('page')) {
-            'login' => 'login',
-            'register' => 'registration',
-            'dashboard' => 'dashboard',
-            'profile' => 'profile',
-            default => 'not-found',
-        };
+        $page = $request->route('page');
+        $user = Auth::user();
+        $routes = config('routes');
 
-        //? Return the view and pass the component name
-        return view('index', ['currentComponent' => $component]);
+        if (!isset($routes[$page])) {
+            return view('index', ['currentComponent' => 'not-found']);
+        }
+
+        $route = $routes[$page];
+
+        if ($route['auth'] ?? false) {
+            if (!$user) {
+                return redirect('/login');
+            }
+
+            if (isset($route['roles']) && !in_array($user->role, $route['roles'])) {
+                abort(403, 'Unauthorized');
+            }
+        }
+
+        return view('index', ['currentComponent' => $route['component']]);
     }
 }

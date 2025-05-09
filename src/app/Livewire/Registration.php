@@ -28,7 +28,7 @@ class Registration extends Component
             'password' => Hash::make($this->passwd),
         ]);
         session()->flash('message', 'Registration successful!');
-        return redirect()->route('\login');
+        return redirect('/login');
     }
     public function render()
     {

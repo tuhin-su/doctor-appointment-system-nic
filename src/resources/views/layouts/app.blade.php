@@ -1,40 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Appointment a Doctor | @yield('title')</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @livewireStyles
-    <script src="https://unpkg.com/@iconify/iconify-icon"></script>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Doctor</title>
+
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
+  @livewireStyles
+
+  <!-- Icons & Scripts -->
+  <script src="https://unpkg.com/@iconify/iconify-icon"></script>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
-<body class="bg-gray-100">
-    <div class="flex w-full h-screen">
-        @if (Auth::check())
-            {{-- Sidebar shown only if user is logged in --}}
-            <div class="h-full w-[250px] relative overflow-hidden">
-                <livewire:side-bar />
-            </div>
+<body class="bg-gray-100 min-h-screen">
+  @if (Auth::check()) 
+  <div id="top-bar" class="fixed top-0 left-0 right-0 h-[60px] z-50 bg-white shadow-sm border-b border-blue-200">
+    <livewire:top-bar />
+  </div>
+  @endif
 
-            <div class="absolute top-0 left-[250px] right-0 bottom-0">
-                <main class="h-full w-full relative p-4 overflow-auto">
-                    @yield('content')
-                </main>
-            </div>
-        @else
-            {{-- Full width if user is not logged in --}}
-            <div class="w-full h-full">
-                <main class="h-full w-full relative p-4 overflow-auto">
-                    @yield('content')
-                </main>
-            </div>
-        @endif
+  <div class="@if (Auth::check()) pt-[60px] @endif">
+    <div class="h-[calc(100vh-60px)] overflow-y-auto">
+      @yield('content')
     </div>
+  </div>
 
-    @livewireScripts
+  @livewireScripts
+  <script src="{{ mix('js/app.js') }}" defer></script>
+
 </body>
-
-
 </html>
