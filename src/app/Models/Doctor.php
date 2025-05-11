@@ -7,6 +7,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $updated_at
  * 
  * @property User $user
+ * @property Collection|WorkSchedule[] $work_schedules
  *
  * @package App\Models
  */
@@ -44,5 +46,10 @@ class Doctor extends Model
 	public function user()
 	{
 		return $this->belongsTo(User::class);
+	}
+
+	public function work_schedules()
+	{
+		return $this->hasMany(WorkSchedule::class);
 	}
 }

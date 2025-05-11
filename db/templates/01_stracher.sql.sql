@@ -115,3 +115,19 @@ CREATE TABLE doctors(
     FOREIGN KEY(user_id) REFERENCES users(id)
 );
 CREATE UNIQUE INDEX doctors_email_unique ON public.doctors USING btree (email);
+
+-- Doctor Work Schedule
+CREATE TABLE work_schedule(
+    id SERIAL NOT NULL,
+    doctor_id SERIAL NOT NULL,
+    day VARCHAR(255) NOT NULL,
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
+    break_start TIME DEFAULT NULL,
+    break_end TIME DEFAULT NULL,
+    enabled BOOLEAN DEFAULT true,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    PRIMARY KEY(id),
+    FOREIGN KEY(doctor_id) REFERENCES doctors(id)
+);
