@@ -38,7 +38,7 @@ class TopBar extends Component
                 'children' => [
                     ['title' => 'Appointments', 'route' => 'doctor-appointment', 'roles' => ['Admin', 'Doctor'], 'icon' => 'ri-time-line', 'icon_color' => 'text-cyan-500'],
                     ['title' => 'Book Appointment', 'route' => 'appointment-booking', 'roles' => ['Patient'], 'icon' => 'ri-calendar-event-fill', 'icon_color' => 'text-sky-500'],
-                    ['title' => 'My Appointments', 'route' => 'dashboard', 'roles' => ['Patient'], 'icon' => 'ri-calendar-check-fill', 'icon_color' => 'text-blue-500'],
+                    ['title' => 'My Appointments', 'route' => 'my-appointments', 'roles' => ['Patient'], 'icon' => 'ri-calendar-check-fill', 'icon_color' => 'text-blue-500'],
                     ['title' => 'Manage Appointments', 'route' => 'dashboard', 'roles' => ['Doctor'], 'icon' => 'ri-calendar-check-fill', 'icon_color' => 'text-blue-500'],
                 ],
                 'icon' => 'ri-calendar-todo-fill',
