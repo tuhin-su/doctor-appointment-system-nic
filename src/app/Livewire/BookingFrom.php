@@ -1,24 +1,28 @@
 <?php
+
+namespace App\Livewire;
+
 use App\Models\Doctor;
+use Livewire\Component;
 use App\Models\WorkSchedule;
 use App\Models\AppointmentsBooking;
 use Carbon\Carbon;
-use Livewire\Component;
 
-class BookingForm extends Component
+class BookingFrom extends Component
 {
-    public $userId; // This is doctor_user_id
+    public $doctorId;
     public $doctor;
     public $currentMonth;
     public $currentYear;
     public $availableDays = [];
     public $selectedDate;
     public $availableTimes = [];
+    public $daysInMonth;
 
-    public function mount($userId)
+    public function mount($doctorId)
     {
-        $this->userId = $userId;
-        $this->doctor = Doctor::where('user_id', $this->userId)->firstOrFail();
+        $this->doctorId = $doctorId;
+        $this->doctor = Doctor::where('user_id', $this->doctorId)->firstOrFail();
         $this->currentMonth = now()->month;
         $this->currentYear = now()->year;
 
@@ -30,9 +34,9 @@ class BookingForm extends Component
         $this->availableDays = [];
         $schedules = $this->doctor->work_schedules;
 
-        $daysInMonth = Carbon::create($this->currentYear, $this->currentMonth)->daysInMonth;
+        $this->daysInMonth = Carbon::create($this->currentYear, $this->currentMonth)->daysInMonth;
 
-        for ($day = 1; $day <= $daysInMonth; $day++) {
+        for ($day = 1; $day <= $this->daysInMonth; $day++) {
             $date = Carbon::create($this->currentYear, $this->currentMonth, $day);
             $dayOfWeek = $date->dayOfWeek;
 
@@ -67,7 +71,7 @@ class BookingForm extends Component
         while ($start->lt($end)) {
             $slot = $start->format('H:i');
 
-            $exists = AppointmentsBooking::where('doctor_user_id', $this->userId)
+            $exists = AppointmentsBooking::where('doctor_user_id', $this->doctorId)
                 ->where('date', $this->selectedDate)
                 ->where('booking_time', $slot)
                 ->exists();
@@ -98,12 +102,23 @@ class BookingForm extends Component
         $this->calculateAvailableDays();
     }
 
+    public function bookSlot($time)
+    {
+        AppointmentsBooking::create([
+            'user_id' => auth()->id(),
+            'doctor_id' => $this->doctor->id,
+            'doctor_user_id' => $this->doctorId,
+            'date' => $this->selectedDate,
+            'booking_time' => $time,
+        ]);
+
+        session()->flash('message', 'Appointment booked successfully!');
+        $this->loadAvailableTimeSlots(); // refresh available slots
+    }
+
+
     public function render()
     {
-        $daysInMonth = Carbon::create($this->currentYear, $this->currentMonth)->daysInMonth;
-
-        return view('livewire.booking-form', [
-            'daysInMonth' => $daysInMonth
-        ]);
+        return view('livewire.booking-from');
     }
 }

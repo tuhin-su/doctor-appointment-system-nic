@@ -1,4 +1,5 @@
 <div class="p-6 max-w-4xl mx-auto bg-white rounded shadow">
+    <!-- Month Navigation -->
     <h2 class="text-2xl font-semibold mb-4">
         {{ \Carbon\Carbon::create($currentYear, $currentMonth)->format('F Y') }}
     </h2>
@@ -8,24 +9,26 @@
         <button wire:click="incrementMonth" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Next →</button>
     </div>
 
+    <!-- Days of the Week -->
     <div class="grid grid-cols-7 gap-2 text-center font-semibold text-gray-700 mb-2">
         @foreach(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as $dayName)
             <div>{{ $dayName }}</div>
         @endforeach
     </div>
 
+    <!-- Calendar Days -->
     <div class="grid grid-cols-7 gap-2">
         @php
             $firstDayOfMonth = \Carbon\Carbon::create($currentYear, $currentMonth, 1);
             $startDayOfWeek = $firstDayOfMonth->dayOfWeek;
         @endphp
 
-        {{-- Empty boxes before month starts --}}
+        <!-- Empty boxes before the month starts -->
         @for ($i = 0; $i < $startDayOfWeek; $i++)
             <div></div>
         @endfor
 
-        {{-- Calendar Days --}}
+        <!-- Calendar Days -->
         @for ($day = 1; $day <= $daysInMonth; $day++)
             @php
                 $isAvailable = in_array($day, $availableDays);
