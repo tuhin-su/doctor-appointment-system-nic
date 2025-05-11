@@ -43,6 +43,27 @@ class Doctor extends Model
 		'job_started'
 	];
 
+	public function workSchedules()
+	{
+		return $this->hasMany(\App\Models\WorkSchedule::class, 'doctor_id');
+	}
+
+	public function getExperienceTextAttribute()
+	{
+		$diffInDays = \Carbon\Carbon::now()->diffInDays($this->job_started);
+
+		if ($diffInDays < 30) {
+			return floor($diffInDays) . ' Day' . ($diffInDays > 1 ? 's' : '');
+		} elseif ($diffInDays < 365) {
+			return intdiv($diffInDays, 30) . ' Month' . (intdiv($diffInDays, 30) > 1 ? 's' : '');
+		} else {
+			return intdiv($diffInDays, 365) . ' Year' . (intdiv($diffInDays, 365) > 1 ? 's' : '');
+		}
+	}
+
+
+
+
 	public function user()
 	{
 		return $this->belongsTo(User::class);

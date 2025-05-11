@@ -131,3 +131,19 @@ CREATE TABLE work_schedule(
     PRIMARY KEY(id),
     FOREIGN KEY(doctor_id) REFERENCES doctors(id)
 );
+
+-- Booking Table
+CREATE TABLE appointments_booking (
+    id SERIAL NOT NULL,
+    user_id SERIAL NOT NULL,
+    doctor_id SERIAL NOT NULL,
+    doctor_user_id SERIAL NOT NULL,
+    date DATE NOT NULL,
+    booking_time TIME NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    PRIMARY KEY(id),
+    FOREIGN KEY(user_id) REFERENCES users(id),
+    FOREIGN KEY(doctor_id) REFERENCES doctors(id),
+    FOREIGN KEY(doctor_user_id) REFERENCES users(id)
+);
