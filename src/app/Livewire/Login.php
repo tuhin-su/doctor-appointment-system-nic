@@ -35,7 +35,7 @@ class Login extends Component
             ]);
 
             session()->flash('message', 'Successfully logged in!');
-            return redirect()->route('/dashboard');
+            return redirect('/dashboard');
         }
 
         // If login fails, throw validation exception
