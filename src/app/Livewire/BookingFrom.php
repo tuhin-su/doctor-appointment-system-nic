@@ -30,21 +30,33 @@ class BookingFrom extends Component
     }
 
     public function calculateAvailableDays()
-    {
-        $this->availableDays = [];
-        $schedules = $this->doctor->work_schedules;
+{
+    $this->availableDays = [];
 
-        $this->daysInMonth = Carbon::create($this->currentYear, $this->currentMonth)->daysInMonth;
+    // Get all schedules for the current doctor
+    $schedules = $this->doctor->work_schedules;
+    
+    // Get the number of days in the selected month/year
+    $this->daysInMonth = Carbon::create($this->currentYear, $this->currentMonth)->daysInMonth;
 
-        for ($day = 1; $day <= $this->daysInMonth; $day++) {
-            $date = Carbon::create($this->currentYear, $this->currentMonth, $day);
-            $dayOfWeek = $date->dayOfWeek;
+    // Loop through each day of the month
+    for ($day = 1; $day <= $this->daysInMonth; $day++) {
+        $date = Carbon::create($this->currentYear, $this->currentMonth, $day);
 
-            if ($schedules->where('day_of_week', $dayOfWeek)->isNotEmpty()) {
-                $this->availableDays[] = $day;
-            }
+        // Get the day name like 'Monday', 'Tuesday', etc.
+        $dayName = $date->format('l');
+
+        // Find the doctor's schedule for that day
+        $schedule = $schedules->firstWhere('day', $dayName);
+
+        // If a schedule exists and is enabled, add the date
+        if ($schedule && $schedule->enabled) {
+            $this->availableDays[] = $day;
         }
     }
+}
+
+    
 
     public function selectDate($day)
     {
@@ -53,38 +65,48 @@ class BookingFrom extends Component
     }
 
     public function loadAvailableTimeSlots()
-    {
-        $date = Carbon::parse($this->selectedDate);
-        $dayOfWeek = $date->dayOfWeek;
+{
+    $date = Carbon::parse($this->selectedDate);
+    $dayName = $date->format('l'); // e.g., 'Monday'
 
-        $schedule = $this->doctor->work_schedules->firstWhere('day_of_week', $dayOfWeek);
+    $schedule = $this->doctor->work_schedules->firstWhere('day', $dayName);
 
-        if (!$schedule) {
-            $this->availableTimes = [];
-            return;
-        }
-
-        $start = Carbon::parse($schedule->start_time);
-        $end = Carbon::parse($schedule->end_time);
-
-        $slots = [];
-        while ($start->lt($end)) {
-            $slot = $start->format('H:i');
-
-            $exists = AppointmentsBooking::where('doctor_user_id', $this->doctorId)
-                ->where('date', $this->selectedDate)
-                ->where('booking_time', $slot)
-                ->exists();
-
-            if (!$exists) {
-                $slots[] = $slot;
-            }
-
-            $start->addMinutes(30);
-        }
-
-        $this->availableTimes = $slots;
+    if (!$schedule || !$schedule->enabled) {
+        $this->availableTimes = [];
+        return;
     }
+
+    $start = Carbon::parse($schedule->start_time);
+    $end = Carbon::parse($schedule->end_time);
+    $breakStart = $schedule->break_start ? Carbon::parse($schedule->break_start) : null;
+    $breakEnd = $schedule->break_end ? Carbon::parse($schedule->break_end) : null;
+
+    $slots = [];
+
+    while ($start->lt($end)) {
+        $slot = $start->format('H:i');
+
+        // Check if within break
+        if ($breakStart && $breakEnd && $start->between($breakStart, $breakEnd->subMinute())) {
+            $start->addMinutes(30);
+            continue;
+        }
+
+        $exists = AppointmentsBooking::where('doctor_user_id', $this->doctorId)
+            ->where('date', $this->selectedDate)
+            ->where('booking_time', $slot)
+            ->exists();
+
+        if (!$exists) {
+            $slots[] = $slot;
+        }
+
+        $start->addMinutes(30);
+    }
+
+    $this->availableTimes = $slots;
+}
+
 
     public function incrementMonth()
     {
@@ -103,18 +125,60 @@ class BookingFrom extends Component
     }
 
     public function bookSlot($time)
-    {
-        AppointmentsBooking::create([
-            'user_id' => auth()->id(),
-            'doctor_id' => $this->doctor->id,
-            'doctor_user_id' => $this->doctorId,
-            'date' => $this->selectedDate,
-            'booking_time' => $time,
-        ]);
+{
+    $date = Carbon::parse($this->selectedDate);
+    $dayName = $date->format('l');
 
-        session()->flash('message', 'Appointment booked successfully!');
-        $this->loadAvailableTimeSlots(); // refresh available slots
+    $schedule = $this->doctor->work_schedules->firstWhere('day', $dayName);
+
+    if (!$schedule || !$schedule->enabled) {
+        session()->flash('error', 'Selected date is not available for booking.');
+        return;
     }
+
+    $start = Carbon::parse($schedule->start_time);
+    $end = Carbon::parse($schedule->end_time);
+    $breakStart = $schedule->break_start ? Carbon::parse($schedule->break_start) : null;
+    $breakEnd = $schedule->break_end ? Carbon::parse($schedule->break_end) : null;
+
+    $slotTime = Carbon::parse($time);
+
+    // Check if time is within working hours
+    if ($slotTime->lt($start) || $slotTime->gte($end)) {
+        session()->flash('error', 'Selected time is outside of working hours.');
+        return;
+    }
+
+    // Check if time is during break
+    if ($breakStart && $breakEnd && $slotTime->between($breakStart, $breakEnd->subMinute())) {
+        session()->flash('error', 'Selected time is during break hours.');
+        return;
+    }
+
+    // Check if time is already booked
+    $exists = AppointmentsBooking::where('doctor_user_id', $this->doctorId)
+        ->where('date', $this->selectedDate)
+        ->where('booking_time', $time)
+        ->exists();
+
+    if ($exists) {
+        session()->flash('error', 'Selected time slot is already booked.');
+        return;
+    }
+
+    // All checks passed, save appointment
+    AppointmentsBooking::create([
+        'user_id' => auth()->id(),
+        'doctor_id' => $this->doctor->id,
+        'doctor_user_id' => $this->doctorId,
+        'date' => $this->selectedDate,
+        'booking_time' => $time,
+    ]);
+
+    session()->flash('message', 'Appointment booked successfully!');
+    $this->loadAvailableTimeSlots(); // Refresh available slots
+}
+
 
 
     public function render()
