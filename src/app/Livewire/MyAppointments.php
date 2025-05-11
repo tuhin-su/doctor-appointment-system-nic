@@ -70,16 +70,17 @@ class MyAppointments extends Component
         if ($appointment && $appointment->user_id == Auth::id()) {
             $appointment->delete();
             session()->flash('message', 'Appointment cancelled successfully!');
-            $this->loadAppointmentsForSelectedDate();  // Re-load appointments for the selected date
+            $this->loadAppointmentsForSelectedDate();
+            
         }
     }
 
     // Reschedule Methods
-    public function openRescheduleModal($appointmentId)
-    {
-        $this->appointmentId = $appointmentId;
-        $this->showRescheduleModal = true;
-    }
+    // public function openRescheduleModal($appointmentId)
+    // {
+    //     $this->appointmentId = $appointmentId;
+    //     $this->showRescheduleModal = true;
+    // }
 
     public function closeRescheduleModal()
     {

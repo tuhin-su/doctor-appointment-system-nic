@@ -62,9 +62,9 @@
                                 Cancel Appointment
                             </button>
                             <!-- Reschedule Button -->
-                            <button wire:click="openRescheduleModal({{ $appointment->id }})" class="mt-2 px-4 py-2 bg-yellow-500 text-white text-sm rounded hover:bg-yellow-600">
+                            {{-- <button wire:click="openRescheduleModal({{ $appointment->id }})" class="mt-2 px-4 py-2 bg-yellow-500 text-white text-sm rounded hover:bg-yellow-600">
                                 Reschedule Appointment
-                            </button>
+                            </button> --}}
                         </div>
                     @endforeach
                 </div>
