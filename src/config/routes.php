@@ -10,4 +10,5 @@ return [
     'user-master'     => ['component' => 'user-master',   'auth' => true,  'roles' =>  ['Admin']],
     'doctor-appointment'     => ['component' => 'doctor-appointment',   'auth' => true,  'roles' =>  ['Admin', 'Doctor']],
     'my-appointments'     => ['component' => 'my-appointments',   'auth' => true,  'roles' =>  ['Patient']],
+    'doctor-appointments'     => ['component' => 'doctor-appointments',   'auth' => true,  'roles' =>  ['Doctor']],
 ];
