@@ -4,9 +4,7 @@
           <h2 class="text-4xl font-bold text-blue-700 mb-4">Profile Settings</h2>
           <p class="text-sm text-gray-600 mb-8">Update your profile information below</p>
 
-          @if (session()->has('message'))
-              <div class="mb-4 text-green-500 font-medium">{{ session('message') }}</div>
-          @endif
+         
 
           <form wire:submit.prevent="save" class="space-y-6">
 

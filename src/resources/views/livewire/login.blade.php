@@ -1,11 +1,5 @@
 <div class="bg-gray-100 min-h-screen flex items-center justify-center">
     <div class="flex w-full max-w-5xl bg-white shadow-2xl rounded-2xl overflow-hidden">
-        @if (session()->has('message'))
-            <div class="bg-green-100 border-t-4 border-green-500 rounded-b text-green-900 px-4 py-3 shadow-md" role="alert">
-                {{ session('message') }}
-            </div>
-        @endif
-
         <!-- Left Image Section -->
         <div class="w-1/2 hidden md:block">
             <img src="https://images.pexels.com/photos/40568/medical-appointment-doctor-healthcare-40568.jpeg"

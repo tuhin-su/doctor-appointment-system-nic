@@ -65,10 +65,4 @@
             @endif
         </div>
     @endif
-
-    @if (session()->has('message'))
-        <div class="mt-4 text-green-600 font-semibold">
-            {{ session('message') }}
-        </div>
-    @endif
 </div>

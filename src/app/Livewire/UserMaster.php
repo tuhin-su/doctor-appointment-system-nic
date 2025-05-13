@@ -65,7 +65,12 @@ class UserMaster extends Component
             ]);
         }
 
-        session()->flash('message', 'User updated successfully!');
+        $this->dispatch(
+            "alert",
+            type: "success",
+            title: "Success",
+            text: "User updated successfully!",
+        );
         $this->closeEditForm();
     }
 

@@ -9,6 +9,7 @@ php artisan cache:clear
 php artisan livewire:discover
 
 php artisan serve --host=0.0.0.0 --port=8000
+php artisan queue:work
 
 
  php artisan  make:livewire counter

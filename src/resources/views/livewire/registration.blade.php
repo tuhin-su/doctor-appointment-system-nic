@@ -14,11 +14,6 @@
       <h2 class="text-4xl font-bold text-blue-700 mb-2">Create Your Account</h2>
       <p class="text-sm text-gray-600 mb-6">Doctor Appointment System Registration</p>
 
-      @if (session()->has('message'))
-        <div class="bg-green-100 text-green-700 p-3 rounded mb-4">
-          {{ session('message') }}
-        </div>
-      @endif
 
       <form wire:submit.prevent="register" class="space-y-5">
         <div>
