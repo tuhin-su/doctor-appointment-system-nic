@@ -4,61 +4,68 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\AppointmentsBooking;
-use Carbon\Carbon;
+use App\Notifications\AppointmentCancel;
 
 class DoctorAppointments extends Component
 {
     public $doctorId;
-    public $currentMonth;
-    public $currentYear;
     public $appointments;
-    public $selectedDate;
-    public $appointmentsForSelectedDate = [];
-    public $daysInMonth;
+    public $rescheduling = false;
+    public $appointmentId;
 
-    public function mount()
+
+
+    public function mount($doctorId = null)
     {
         $this->doctorId = auth()->id();
-        $this->currentMonth = now()->month;
-        $this->currentYear = now()->year;
         $this->loadAppointments();
     }
 
     public function loadAppointments()
     {
-        // Load all appointments for the doctor for the current month and year
         $this->appointments = AppointmentsBooking::where('doctor_user_id', $this->doctorId)
-            ->whereMonth('date', $this->currentMonth)
-            ->whereYear('date', $this->currentYear)
+            ->where(function ($query) {
+                $query->whereNull('reschedule_status')
+                    ->orWhereNotIn('reschedule_status', ['cancelled', 'pending', 'completed']);
+            })
+            ->orderBy('date', 'desc')
+            ->orderBy('booking_time')
             ->get();
-
-        $this->daysInMonth = Carbon::create($this->currentYear, $this->currentMonth)->daysInMonth;
     }
 
-    public function selectDate($day)
+    public function cancelAppointment($appointmentId)
     {
-        $this->selectedDate = Carbon::create($this->currentYear, $this->currentMonth, $day)->toDateString();
+        $appointment = AppointmentsBooking::find($appointmentId);
 
-        $this->appointmentsForSelectedDate = $this->appointments->filter(function ($appointment) {
-            return Carbon::parse($appointment->date)->toDateString() === $this->selectedDate;
-        });
+        if ($appointment && $appointment->doctor_user_id == $this->doctorId) {
+            $appointment->reschedule_status = 'cancelled';
+            $appointment->save();
+
+            $this->dispatch(
+                "alert",
+                type: "success",
+                title: "Success",
+                text: "Appointment cancelled successfully!",
+            );
+
+            $appointment->user->notify(new AppointmentCancel($appointment));
+        }
+
+        $this->appointments = AppointmentsBooking::where('doctor_user_id', $this->doctorId)
+            ->orderBy('date', 'desc')
+            ->orderBy('booking_time')
+            ->get();
     }
 
-
-    public function incrementMonth()
+    public function rescheduleAppointment($appointmentId)
     {
-        $date = Carbon::create($this->currentYear, $this->currentMonth)->addMonth();
-        $this->currentMonth = $date->month;
-        $this->currentYear = $date->year;
-        $this->loadAppointments();
+        $this->rescheduling = true;
+        $this->appointmentId = $appointmentId;
     }
 
-    public function decrementMonth()
+    public function cancelReschedule()
     {
-        $date = Carbon::create($this->currentYear, $this->currentMonth)->subMonth();
-        $this->currentMonth = $date->month;
-        $this->currentYear = $date->year;
-        $this->loadAppointments();
+        $this->rescheduling = false;
     }
 
     public function render()

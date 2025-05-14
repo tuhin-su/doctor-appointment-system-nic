@@ -70,9 +70,17 @@ class AppointmentBooked extends Notification
 
     public function toArray(object $notifiable): array
     {
+        if ($notifiable->role === 'Patient') {
+            return [
+                'message' => 'You have an upcoming appointment with Dr. ' . $this->appointment->doctorUser->name,
+                'appointment_id' => $this->appointment->id,
+            ];
+        }
+
         return [
-            'message' => 'You have an upcoming appointment with Dr. ' . $this->appointment->doctor->name,
+            'message' => 'You have an upcoming appointment with ' . $this->appointment->patientUser->name,
             'appointment_id' => $this->appointment->id,
         ];
+        
     }
 }

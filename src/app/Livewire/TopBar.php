@@ -27,7 +27,7 @@ class TopBar extends Component
                 'roles' => ['Admin'],
                 'children' => [
                     ['title' => 'Users', 'route' => 'user-master', 'roles' => ['Admin'], 'icon' => 'ri-pass-valid-line', 'icon_color' => 'text-emerald-500'],
-                    ['title' => 'Work Schedule', 'route' => 'dashboard', 'roles' => ['Admin'], 'icon' => 'ri-empathize-line', 'icon_color' => 'text-teal-500'],
+                    ['title' => 'Work Schedule', 'route' => 'admin-work-schedule', 'roles' => ['Admin'], 'icon' => 'ri-empathize-line', 'icon_color' => 'text-teal-500'],
                 ],
                 'icon' => 'ri-briefcase-fill',
                 'icon_color' => 'text-green-500',
@@ -36,7 +36,8 @@ class TopBar extends Component
                 'title' => 'Appointment System',
                 'roles' => ['Admin', 'Doctor', 'Patient'],
                 'children' => [
-                    ['title' => 'Appointments', 'route' => 'doctor-appointment', 'roles' => ['Admin', 'Doctor'], 'icon' => 'ri-time-line', 'icon_color' => 'text-cyan-500'],
+                    ['title' => 'All Bookings', 'route' => 'all-bookings', 'roles' => ['Admin'], 'icon' => 'ri-time-line', 'icon_color' => 'text-cyan-500'],
+                    ['title' => 'Appointments', 'route' => 'doctor-appointment', 'roles' => ['Doctor'], 'icon' => 'ri-time-line', 'icon_color' => 'text-cyan-500'],
                     ['title' => 'Book Appointment', 'route' => 'appointment-booking', 'roles' => ['Patient'], 'icon' => 'ri-calendar-event-fill', 'icon_color' => 'text-sky-500'],
                     ['title' => 'My Appointments', 'route' => 'my-appointments', 'roles' => ['Patient'], 'icon' => 'ri-calendar-check-fill', 'icon_color' => 'text-blue-500'],
                     ['title' => 'Manage Appointments', 'route' => 'doctor-appointments', 'roles' => ['Doctor'], 'icon' => 'ri-calendar-check-fill', 'icon_color' => 'text-blue-500'],
@@ -46,20 +47,13 @@ class TopBar extends Component
             ],
             [
                 'title' => 'Reports',
-                'roles' => ['Admin', 'Patient'],
+                'roles' => ['Admin'],
                 'children' => [
                     ['title' => 'Reports', 'route' => 'dashboard', 'roles' => ['Admin'], 'icon' => 'ri-file-list-3-line', 'icon_color' => 'text-rose-500'],
                     ['title' => 'Search Doctors', 'route' => 'dashboard', 'roles' => ['Patient'], 'icon' => 'ri-briefcase-fill', 'icon_color' => 'text-pink-500'],
                 ],
                 'icon' => 'ri-file-chart-2-fill',
                 'icon_color' => 'text-red-500',
-            ],
-            [
-                'title' => 'Notifications',
-                'route' => 'dashboard',
-                'roles' => ['Admin', 'Doctor', 'Patient'],
-                'icon' => 'ri-notification-fill',
-                'icon_color' => 'text-purple-500',
             ],
         ];
 

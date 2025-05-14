@@ -28,7 +28,8 @@ class MyAppointments extends Component
     $appointment = AppointmentsBooking::find($appointmentId);
 
     if ($appointment && $appointment->user_id == Auth::id()) {
-        $appointment->delete();
+        $appointment->reschedule_status = 'cancelled';
+        $appointment->save();
 
         $this->dispatch(
             "alert",
@@ -50,6 +51,11 @@ class MyAppointments extends Component
     {
         $this->appointmentId = $appointmentId;
         $this->rescheduling = true;
+    }
+
+    public function cancelReschedule()
+    {
+        $this->rescheduling = false;
     }
 
     public function render()

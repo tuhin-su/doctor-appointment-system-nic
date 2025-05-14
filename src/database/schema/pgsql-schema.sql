@@ -45,6 +45,8 @@ CREATE TABLE public.appointments_booking (
     doctor_user_id integer NOT NULL,
     date date NOT NULL,
     booking_time time without time zone NOT NULL,
+    reschedule_status string DEFAULT NULL,
+    reschedule_by string DEFAULT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
