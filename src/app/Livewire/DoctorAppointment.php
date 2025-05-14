@@ -30,7 +30,7 @@ class DoctorAppointment extends Component
             abort(403, 'Access denied: not a registered doctor.');
         }
 
-        $doctorId = $doctor->id; // Use doctor's actual primary key
+        $doctorId = $doctor->id;
 
         // All days
         $daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -50,10 +50,10 @@ class DoctorAppointment extends Component
                 ];
             } else {
                 $this->workSchedules[$day] = [
-                    'start_time' => null,
-                    'end_time' => null,
-                    'break_start' => null,
-                    'break_end' => null,
+                    'start_time' => '08:00 AM',
+                    'end_time' => '05:30 PM',
+                    'break_start' => '01:00 PM',
+                    'break_end' => '02:00 PM',
                     'enabled' => false,
                 ];
             }
@@ -84,7 +84,7 @@ class DoctorAppointment extends Component
                     'enabled' => $schedule['enabled'],
                 ]);
             } else {
-                WorkSchedule::create([
+               $workSchedule = WorkSchedule::create([
                     'doctor_id' => $doctorId,
                     'day' => $day,
                     'start_time' => $schedule['start_time'],
@@ -100,6 +100,9 @@ class DoctorAppointment extends Component
         if ($success) {
             $this->successMessage = "Schedule updated successfully!";
         }
+
+        // UI UPDATE
+        $this->workSchedules = $this->workSchedules;
     }
 
 
