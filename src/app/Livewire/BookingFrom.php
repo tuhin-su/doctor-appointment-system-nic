@@ -202,7 +202,8 @@ class BookingFrom extends Component
         $appointment->doctorUser->notify(new AppointmentBooked($appointment));
 
         $reminderTime = Carbon::parse("{$appointment->date} {$appointment->time}")->subDay();
-        $appointment->patientUser->notify(new AppointmentReminder($reminderTime));
+        $appointment->patientUser
+            ->notify((new AppointmentReminder($appointment))->delay($reminderTime));
 
         $this->dispatch(
             "alert",

@@ -4,9 +4,12 @@ namespace App\Notifications;
 
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Bus\Queueable; 
 
-class AppointmentReminder extends Notification
+class AppointmentReminder extends Notification  implements ShouldQueue
 {
+    use Queueable;
     protected $appointment;
 
     public function __construct($appointment)
@@ -21,8 +24,8 @@ class AppointmentReminder extends Notification
 
     public function toMail($notifiable)
     {
-        $doctor = $this->appointment->doctor;
-        $patient = $this->appointment->patient;
+        $doctor = $this->appointment->doctorUser;
+        $patient = $this->appointment->patientUser;
         $date = $this->appointment->date;
         // convert date to MM/DD/YYYY
         $date = date('m/d/Y', strtotime($date));
