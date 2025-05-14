@@ -37,4 +37,9 @@ class AppointmentsBooking extends Model
     {
         return $this->belongsTo(User::class, 'doctor_user_id');
     }
+
+    public function patientUser()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

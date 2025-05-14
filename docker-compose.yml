@@ -26,3 +26,11 @@
     volumes:
       - ./db/data:/var/lib/postgresql/data
       - ./db/templates:/docker-entrypoint-initdb.d
+
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"

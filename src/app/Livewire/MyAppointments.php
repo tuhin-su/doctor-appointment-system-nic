@@ -69,7 +69,12 @@ class MyAppointments extends Component
         $appointment = AppointmentsBooking::find($appointmentId);
         if ($appointment && $appointment->user_id == Auth::id()) {
             $appointment->delete();
-            session()->flash('message', 'Appointment cancelled successfully!');
+            $this->dispatch(
+                "alert",
+                type: "success",
+                title: "Success",
+                text: "Appointment cancelled successfully!",
+            );
             $this->loadAppointmentsForSelectedDate();
             
         }
@@ -95,8 +100,12 @@ class MyAppointments extends Component
             $appointment->date = Carbon::parse($this->newDate);
             $appointment->booking_time = $this->newTime;
             $appointment->save();
-
-            session()->flash('message', 'Appointment rescheduled successfully!');
+            $this->dispatch(
+                "alert",
+                type: "success",
+                title: "Success",
+                text: "Appointment rescheduled successfully!",
+            );
             $this->closeRescheduleModal();
             $this->loadAppointmentsForSelectedDate();  // Re-load appointments for the selected date
         }

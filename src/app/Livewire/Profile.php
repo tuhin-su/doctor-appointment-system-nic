@@ -59,7 +59,12 @@ class Profile extends Component
 
         $user->save();
 
-        session()->flash('message', 'Profile updated successfully.');
+        $this->dispatch(
+            "alert",
+            type: "error",
+            title: "Error",
+            text: "Selected date is not available for booking.",
+        );
     }
 
     public function render()

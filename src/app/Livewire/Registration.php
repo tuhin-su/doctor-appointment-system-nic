@@ -27,7 +27,13 @@ class Registration extends Component
             'email' => $this->email,
             'password' => Hash::make($this->passwd),
         ]);
-        session()->flash('message', 'Registration successful!');
+   
+        $this->dispatch(
+            "alert",
+            type: "success",
+            title: "Success",
+            text: "Registration successful!",
+        );
         return redirect('/login');
     }
     public function render()

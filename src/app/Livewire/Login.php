@@ -34,7 +34,12 @@ class Login extends Component
                 'user' => Auth::user(),
             ]);
 
-            session()->flash('message', 'Successfully logged in!');
+            $this->dispatch(
+                "alert",
+                type: "success",
+                title: "Success",
+                text: "Successfully logged in!",
+            );
             return redirect('/dashboard');
         }
 

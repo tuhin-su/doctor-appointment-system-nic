@@ -7,6 +7,10 @@ WORKDIR /var/www
 RUN apt-get update && apt-get install -y \
     git curl unzip zip sudo libzip-dev libonig-dev libxml2-dev libpq-dev \
     && docker-php-ext-install pdo pdo_pgsql zip
+    
+RUN apt-get update && apt-get install -y \
+    git curl unzip zip sudo libzip-dev libonig-dev libxml2-dev libpq-dev postgresql-client \
+    && docker-php-ext-install pdo pdo_pgsql zip
 
 # Install Node.js and npm (using NodeSource)
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
