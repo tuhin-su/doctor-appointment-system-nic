@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AppointmentBooked extends Notification
+class AppointmentCancel extends Notification
 {
     use Queueable;
 
@@ -20,7 +20,7 @@ class AppointmentBooked extends Notification
 
     public function via(object $notifiable): array
     {
-        return ['mail',  'database'];
+        return ['mail'];
     }
 
     public function toMail($notifiable)
@@ -36,26 +36,25 @@ class AppointmentBooked extends Notification
 
         if ($notifiable->role === 'doctor') {
             return (new MailMessage)
-                ->subject('New Appointment')
+                ->subject('Appointment Cancelled')
                 ->greeting("Hello Dr. {$notifiable->name},")
-                ->line("You have an new appointment scheduled.")
+                ->line("Your appointment with {$patient->name} has been cancelled.")
                 ->line("Patient: {$patient->name}")
                 ->line("Date: {$date}")
                 ->line("Time: {$time}")
-                ->line("Please make sure to be available on time.")
+                ->line("We make this time available for others.")
                 ->line('Thank you for using our platform.');
         }
 
         if ($notifiable->role === 'patient') {
             return (new MailMessage)
-                ->subject('Appointment Booked')
+                ->subject('Appointment Cancelled')
                 ->greeting("Hi {$notifiable->name},")
-                ->line("Your appointment with Dr. {$doctor->name} has been scheduled.")
+                ->line("Your appointment with Dr. {$doctor->name} has been cancelled.")
                 ->line("Doctor: Dr. {$doctor->name}")
                 ->line("Date: {$date}")
                 ->line("Time: {$time}")
-                ->line("Please arrive 10 minutes early.")
-                ->line('We look forward to seeing you!');
+                ->line('Thank you for using our platform.');
         }
 
         // Optional: default message for unknown roles
@@ -65,14 +64,5 @@ class AppointmentBooked extends Notification
             ->line("Date: {$date}")
             ->line("Time: {$time}")
             ->line('Thank you!');
-    }
-
-
-    public function toArray(object $notifiable): array
-    {
-        return [
-            'message' => 'You have an upcoming appointment with Dr. ' . $this->appointment->doctor->name,
-            'appointment_id' => $this->appointment->id,
-        ];
     }
 }
