@@ -24,19 +24,27 @@ class MyAppointments extends Component
 
 
     public function cancelAppointment($appointmentId)
-    {
-        $appointment = AppointmentsBooking::find($appointmentId);
-        if ($appointment && $appointment->user_id == Auth::id()) {
-            $appointment->delete();
-            $this->dispatch(
-                "alert",
-                type: "success",
-                title: "Success",
-                text: "Appointment cancelled successfully!",
-            );
-            $appointment->user->notify(new AppointmentCancel($appointment));            
-        }
+{
+    $appointment = AppointmentsBooking::find($appointmentId);
+
+    if ($appointment && $appointment->user_id == Auth::id()) {
+        $appointment->delete();
+
+        $this->dispatch(
+            "alert",
+            type: "success",
+            title: "Success",
+            text: "Appointment cancelled successfully!",
+        );
+
+        $appointment->user->notify(new AppointmentCancel($appointment));
     }
+
+    $this->appointments = AppointmentsBooking::where('user_id', Auth::id())
+        ->orderBy('date', 'desc')
+        ->orderBy('booking_time')
+        ->get();
+}
 
     public function rescheduleAppointment($appointmentId)
     {
