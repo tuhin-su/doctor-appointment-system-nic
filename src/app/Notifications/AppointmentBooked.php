@@ -25,8 +25,8 @@ class AppointmentBooked extends Notification
 
     public function toMail($notifiable)
     {
-        $doctor = $this->appointment->doctor;
-        $patient = $this->appointment->patient;
+        $doctor = $this->appointment->doctorUser;
+        $patient = $this->appointment->patientUser;
         $date = $this->appointment->date;
         // convert date to MM/DD/YYYY
         $date = date('m/d/Y', strtotime($date));
@@ -34,7 +34,7 @@ class AppointmentBooked extends Notification
         $time = $this->appointment->booking_time;
         $time = date('h:i A', strtotime($time));
 
-        if ($notifiable->role === 'doctor') {
+        if ($notifiable->role === 'Doctor') {
             return (new MailMessage)
                 ->subject('New Appointment')
                 ->greeting("Hello Dr. {$notifiable->name},")
@@ -46,7 +46,7 @@ class AppointmentBooked extends Notification
                 ->line('Thank you for using our platform.');
         }
 
-        if ($notifiable->role === 'patient') {
+        if ($notifiable->role === 'Patient') {
             return (new MailMessage)
                 ->subject('Appointment Booked')
                 ->greeting("Hi {$notifiable->name},")

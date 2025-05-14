@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\AppointmentsBooking;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Notifications\AppointmentCancel;
 
 class MyAppointments extends Component
 {
@@ -75,6 +76,7 @@ class MyAppointments extends Component
                 title: "Success",
                 text: "Appointment cancelled successfully!",
             );
+            $appointment->user->notify(new AppointmentCancel($appointment));
             $this->loadAppointmentsForSelectedDate();
             
         }
