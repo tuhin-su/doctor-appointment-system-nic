@@ -60,7 +60,6 @@
             </div>
         </div>
     @elseif ($bookingMode)
-    <livewire:booking-from :doctorId="$doctorId" />
-
+        <livewire:booking-form :doctorId="$doctorId" />
     @endif
 </div>

@@ -11,7 +11,7 @@ use App\Notifications\AppointmentReminder;
 use App\Notifications\AppointmentBooked;
 
 
-class BookingFrom extends Component
+class BookingForm extends Component
 {
     public $doctorId;
     public $doctor;
@@ -191,7 +191,7 @@ class BookingFrom extends Component
 
         // All checks passed, save appointment
         $appointment = AppointmentsBooking::create([
-            'user_id' => auth()->user()->id,
+            'user_id' => auth()->id(),
             'doctor_id' => $this->doctor->id,
             'doctor_user_id' => $this->doctorId,
             'date' => $this->selectedDate,
@@ -211,13 +211,13 @@ class BookingFrom extends Component
             title: "Success",
             text: "Appointment booked successfully.",
         );
-        $this->loadAvailableTimeSlots(); // Refresh available slots
+        $this->loadAvailableTimeSlots();
     }
 
 
 
     public function render()
     {
-        return view('livewire.booking-from');
+        return view('livewire.booking-form');
     }
 }
