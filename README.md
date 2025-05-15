@@ -7,8 +7,8 @@ This project uses Docker to run a Laravel application for local development.
 ### 1. Clone the Repository
 
 ```bash
-git clone https://your-repo-url.git
-cd your-project-folder
+git clone https://github.com/tuhin-su/doctor-appointment-system-nic.git
+cd doctor-appointment-system-nic
 ```
 
 ### 2. Copy Environment File
