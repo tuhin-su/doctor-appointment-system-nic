@@ -108,3 +108,12 @@ class User extends Authenticatable
     // your code here
 }
 ```
+## ALERT TO UI
+```php
+ $this->dispatch(
+            "alert",
+            type: "success",
+            title: "Success",
+            text: "Appointment cancelled successfully!",
+        );
+```

@@ -3,10 +3,16 @@
         <h1 class="text-2xl font-bold mb-4 text-gray-800">All Bookings</h1>
 
         {{-- Search Input --}}
-        <div class="mb-6">
-            <input type="text" wire:model.debounce.500ms="search" placeholder="Search by patient, doctor, or date..."
-                class="w-full p-3 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+        <div class="mb-6 flex gap-2">
+            <input type="text" wire:model.defer="search" placeholder="Search by patient, doctor, or date..."
+                class="flex-grow p-3 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+
+            <button wire:click="searchBookings" type="button"
+                class="px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl shadow">
+                Search
+            </button>
         </div>
+
 
         {{-- Table View for Desktop --}}
         <div class="hidden md:block bg-white shadow rounded-xl overflow-hidden">

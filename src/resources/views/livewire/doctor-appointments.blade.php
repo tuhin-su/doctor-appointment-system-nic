@@ -9,6 +9,17 @@
             <livewire:reschedule-appointment-approval />
         </div>
 
+
+        <div class="flex gap-2 mb-6">
+            <input type="text" placeholder="Search patient by name or date (YYYY-MM-DD)..." wire:model.defer="search"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+
+            <button wire:click="searchAppointments"
+                class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+                Search
+            </button>
+        </div>
+
         <!-- Appointments -->
         @if ($appointments->count() > 0)
             <div class="space-y-4">
@@ -61,7 +72,9 @@
         @endif
     @elseif ($rescheduling)
         <div class="flex justify-between items-center mb-4">
-            <button wire:click="cancelReschedule" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 flex items-center gap-1"><i class="ri-arrow-left-line"></i> Back</button>
+            <button wire:click="cancelReschedule"
+                class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 flex items-center gap-1"><i
+                    class="ri-arrow-left-line"></i> Back</button>
         </div>
         @livewire('reschedule-appointment-form', ['appointmentId' => $appointmentId])
     @endif

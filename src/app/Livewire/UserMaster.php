@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Livewire;
 
 use Livewire\Component;
@@ -17,9 +18,32 @@ class UserMaster extends Component
     public $verified_degree;
     public $job_started;
 
+    public $search = ''; // Search input
+
     public function mount()
     {
-        $this->users = User::all();
+        $this->loadUsers();
+    }
+
+    public function loadUsers($searchTerm = null)
+    {
+        $query = User::query();
+
+        if ($searchTerm) {
+            $searchTerm = '%' . $searchTerm . '%';
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('name', 'ilike', $searchTerm)
+                  ->orWhere('email', 'ilike', $searchTerm)
+                  ->orWhere('role', 'ilike', $searchTerm);
+            });
+        }
+
+        $this->users = $query->get();
+    }
+
+    public function searchUsers()
+    {
+        $this->loadUsers($this->search);
     }
 
     public function openEditForm($userId)
@@ -30,6 +54,8 @@ class UserMaster extends Component
         $this->name = $this->user->name;
         $this->email = $this->user->email;
         $this->role = $this->user->role;
+
+        $this->roleChanged();
     }
 
     public function roleChanged()
@@ -39,6 +65,10 @@ class UserMaster extends Component
             $this->specialty = $doctor?->specialty ?? '';
             $this->verified_degree = $doctor?->verified_degree ?? false;
             $this->job_started = $doctor?->job_started?->format('Y-m-d') ?? '';
+        } else {
+            $this->specialty = '';
+            $this->verified_degree = false;
+            $this->job_started = null;
         }
     }
 
@@ -56,7 +86,6 @@ class UserMaster extends Component
             'role' => $this->role,
         ]);
 
-        // Save doctor data if role is Doctor
         if ($this->role === 'Doctor') {
             $this->user->doctors()->updateOrCreate([], [
                 'specialty' => $this->specialty,
@@ -65,13 +94,14 @@ class UserMaster extends Component
             ]);
         }
 
-        $this->dispatch(
-            "alert",
-            type: "success",
-            title: "Success",
-            text: "User updated successfully!",
-        );
+        $this->dispatchBrowserEvent('alert', [
+            'type' => 'success',
+            'title' => 'Success',
+            'text' => 'User updated successfully!',
+        ]);
+
         $this->closeEditForm();
+        $this->loadUsers(); // Refresh users list
     }
 
     public function closeEditForm()

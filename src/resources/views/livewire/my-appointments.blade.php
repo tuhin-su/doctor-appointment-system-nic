@@ -7,6 +7,19 @@
         <div class="w-full mt-6 mb-6">
             <livewire:reschedule-appointment-approval />
         </div>
+
+        <div class="flex items-center gap-2 max-w-md mx-auto mb-4">
+            <input type="text" wire:model.defer="search"
+                placeholder="Search by doctor name or date (YYYY-MM-DD)"
+                class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button wire:click="searchAppointments"
+                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                Search
+            </button>
+        </div>
+        
+
+        
         <!-- Appointments -->
         @if ($appointments->count() > 0)
             <div class="space-y-4">

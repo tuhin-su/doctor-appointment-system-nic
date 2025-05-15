@@ -2,14 +2,27 @@
     @if (!$bookingMode)
         <div class="bg-gray-100 min-h-screen p-6">
             <!-- Search Input -->
-            <div class="flex justify-center mb-6">
-                <input type="text" placeholder="Search doctors by name or specialty..."
-                    class="w-full max-w-xl px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    id="doctorSearchInput" />
+            <div class="flex flex-col items-center space-y-4">
+                <div class="flex w-full max-w-xl">
+                    <input
+                        type="text"
+                        wire:model="search"
+                        placeholder="Search doctors by name or specialty..."
+                        class="flex-grow px-4 py-2 border border-gray-300 rounded-l-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    />
+                    <button
+                        wire:click="searchQuery"
+                        class="px-4 py-2 bg-indigo-600 text-white rounded-r-md hover:bg-indigo-700 transition"
+                    >
+                        Search
+                    </button>
+                </div>
             </div>
+            
+            
 
             <!-- Doctor Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 mt-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
                 @foreach ($users as $user)
                     @php
                         $doctor = $user->doctors->first(); // If multiple, adapt accordingly

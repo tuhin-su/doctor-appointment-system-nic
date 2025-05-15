@@ -11,13 +11,20 @@ class AllBookings extends Component
     use WithPagination;
 
     public string $search = '';
+    public $searchQuery = ''; // Used only on submit
     public $rescheduleBookingView = false;
     public $rescheduleBookingId = null;
 
-    protected $queryString = ['search'];
+    protected $queryString = ['searchQuery'];
 
     public function updatingSearch()
     {
+        // Prevent pagination reset until button clicked
+    }
+
+    public function searchBookings()
+    {
+        $this->searchQuery = $this->search;
         $this->resetPage();
     }
 
@@ -47,19 +54,17 @@ class AllBookings extends Component
         $this->rescheduleBookingId = null;
     }
 
-
-
     public function render()
     {
         $bookings = AppointmentsBooking::with(['patientUser', 'doctorUser'])
-            ->when($this->search, function ($query) {
+            ->when($this->searchQuery, function ($query) {
                 $query->whereHas('patientUser', function ($q) {
-                    $q->where('name', 'like', '%' . $this->search . '%');
+                    $q->where('name', 'like', '%' . $this->searchQuery . '%');
                 })
-                    ->orWhereHas('doctorUser', function ($q) {
-                        $q->where('name', 'like', '%' . $this->search . '%');
-                    })
-                    ->orWhere('date', 'like', '%' . $this->search . '%');
+                ->orWhereHas('doctorUser', function ($q) {
+                    $q->where('name', 'like', '%' . $this->searchQuery . '%');
+                })
+                ->orWhere('date', 'like', '%' . $this->searchQuery . '%');
             })
             ->orderBy('date', 'desc')
             ->paginate(10);
