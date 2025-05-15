@@ -11,17 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('work_schedule', function (Blueprint $table) {
-            $table->increments('id');
-            $table->increments('doctor_id');
-            $table->string('day');
-            $table->time('start_time');
-            $table->time('end_time');
-            $table->time('break_start')->nullable();
-            $table->time('break_end')->nullable();
-            $table->boolean('enabled')->nullable()->default(true);
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('work_schedule')) {
+            Schema::create('work_schedule', function (Blueprint $table) {
+                $table->increments('id');
+                $table->increments('doctor_id');
+                $table->string('day');
+                $table->time('start_time');
+                $table->time('end_time');
+                $table->time('break_start')->nullable();
+                $table->time('break_end')->nullable();
+                $table->boolean('enabled')->nullable()->default(true);
+                $table->timestamps();
+            });
+        }
     }
 
     /**

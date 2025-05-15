@@ -11,15 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('jobs', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('queue')->index();
-            $table->text('payload');
-            $table->smallInteger('attempts');
-            $table->integer('reserved_at')->nullable();
-            $table->integer('available_at');
-            $table->integer('created_at');
-        });
+        if (!Schema::hasTable('jobs')) {
+            Schema::create('jobs', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('queue')->index();
+                $table->text('payload');
+                $table->smallInteger('attempts');
+                $table->integer('reserved_at')->nullable();
+                $table->integer('available_at');
+                $table->integer('created_at');
+            });
+        }
     }
 
     /**

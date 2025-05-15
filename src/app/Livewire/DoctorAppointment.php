@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\WorkSchedule;
-use Livewire\WithPagination;
+use App\Models\User;
 
 class DoctorAppointment extends Component
 {
@@ -19,9 +19,12 @@ class DoctorAppointment extends Component
         'workSchedules.*.enabled' => 'boolean',
     ];
 
-    public function mount()
+    public function mount($userId=null)
     {
         $user = auth()->user();
+        if ($userId) {
+            $user = User::find($userId);
+        }
 
         // Make sure the doctor record exists for this user
         $doctor = \App\Models\Doctor::where('user_id', $user->id)->first();

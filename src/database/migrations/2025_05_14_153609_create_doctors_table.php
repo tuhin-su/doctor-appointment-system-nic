@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('doctors', function (Blueprint $table) {
-            $table->increments('id');
-            $table->increments('user_id');
-            $table->boolean('verified_degree')->nullable()->default(false);
-            $table->string('specialty');
-            $table->date('job_started');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('doctors')) {
+            Schema::create('doctors', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedInteger('user_id');
+                $table->boolean('verified_degree')->nullable()->default(false);
+                $table->string('specialty');
+                $table->date('job_started');
+                $table->timestamps();
+            });
+        }
     }
 
     /**
