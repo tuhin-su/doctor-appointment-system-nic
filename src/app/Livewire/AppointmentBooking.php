@@ -20,7 +20,7 @@ class AppointmentBooking extends Component
         $this->loadUsers();
     }
 
-    public function updatedSearch()
+    public function searchQuery()
     {
         $this->loadUsers();
     }

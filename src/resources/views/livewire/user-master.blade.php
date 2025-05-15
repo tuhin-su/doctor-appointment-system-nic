@@ -1,5 +1,15 @@
 <div class="w-full p-6">
     @if ($viewMode)
+        <div class="mb-6 flex space-x-2">
+            <input type="text" wire:model.defer="search" placeholder="Search by name, email, or role..."
+                class="flex-grow px-4 py-2 border rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                autocomplete="off">
+            <button wire:click="searchUsers"
+                class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg shadow" type="button">
+                Search
+            </button>
+        </div>
+
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @foreach ($users as $user)
                 <div
@@ -47,8 +57,8 @@
                     <!-- Profile Sidebar -->
                     <div
                         class="bg-gradient-to-br from-indigo-600 to-indigo-800 text-white flex flex-col items-center justify-center p-6">
-                        <img src="{{ $user->profile_image ?? 'https://picsum.photos/200?random=1' }}" alt="Profile Image" 
-                            class="w-28 h-28 rounded-full border-4 border-white shadow mb-4" >
+                        <img src="{{ $user->profile_image ?? 'https://picsum.photos/200?random=1' }}"
+                            alt="Profile Image" class="w-28 h-28 rounded-full border-4 border-white shadow mb-4">
                         <h3 class="text-lg font-semibold">{{ $user->name }}</h3>
                         <p class="text-sm text-indigo-200">Profile Image (Read Only)</p>
                     </div>
@@ -81,22 +91,20 @@
                             <!-- Role -->
                             <div>
                                 <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
-                                
-                                <select id="role"
-                                        wire:model="role"
-                                        wire:change="roleChanged"
-                                        class="w-full mt-1 px-4 py-2 border rounded-lg shadow-sm text-sm focus:ring-indigo-500 focus:border-indigo-500">
+
+                                <select id="role" wire:model="role" wire:change="roleChanged"
+                                    class="w-full mt-1 px-4 py-2 border rounded-lg shadow-sm text-sm focus:ring-indigo-500 focus:border-indigo-500">
                                     <option value="">Select role</option>
                                     <option value="Admin">Admin</option>
                                     <option value="Doctor">Doctor</option>
                                     <option value="Patient">Patient</option>
                                 </select>
-                            
+
                                 @error('role')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
-                            
+
 
                             <!-- Doctor Fields -->
                             @if ($role === 'Doctor')
