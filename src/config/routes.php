@@ -13,4 +13,5 @@ return [
     'doctor-appointments'     => ['component' => 'doctor-appointments',   'auth' => true,  'roles' =>  ['Doctor']],
     'admin-work-schedule'     => ['component' => 'admin-work-schedule',   'auth' => true,  'roles' =>  ['Admin']],
     'all-bookings'     => ['component' => 'all-bookings',   'auth' => true,  'roles' =>  ['Admin']],
+    'appointment-report-dashboard'     => ['component' => 'appointment-report-dashboard',   'auth' => true,  'roles' =>  ['Admin']],
 ];

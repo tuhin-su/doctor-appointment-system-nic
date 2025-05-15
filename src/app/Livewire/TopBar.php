@@ -49,8 +49,7 @@ class TopBar extends Component
                 'title' => 'Reports',
                 'roles' => ['Admin'],
                 'children' => [
-                    ['title' => 'Reports', 'route' => 'dashboard', 'roles' => ['Admin'], 'icon' => 'ri-file-list-3-line', 'icon_color' => 'text-rose-500'],
-                    ['title' => 'Search Doctors', 'route' => 'dashboard', 'roles' => ['Patient'], 'icon' => 'ri-briefcase-fill', 'icon_color' => 'text-pink-500'],
+                    ['title' => 'Reports', 'route' => 'appointment-report-dashboard', 'roles' => ['Admin'], 'icon' => 'ri-file-list-3-line', 'icon_color' => 'text-rose-500'],
                 ],
                 'icon' => 'ri-file-chart-2-fill',
                 'icon_color' => 'text-red-500',
