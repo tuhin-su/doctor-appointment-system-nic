@@ -35,21 +35,12 @@ class BookingForm extends Component
     public function calculateAvailableDays()
     {
         $this->availableDays = [];
-
-        // Get all schedules for the current doctor
         $schedules = $this->doctor->work_schedules;
-
-        // Get the number of days in the selected month/year
         $this->daysInMonth = Carbon::create($this->currentYear, $this->currentMonth)->daysInMonth;
 
-        // Loop through each day of the month
         for ($day = 1; $day <= $this->daysInMonth; $day++) {
             $date = Carbon::create($this->currentYear, $this->currentMonth, $day);
-
-            // Get the day name like 'Monday', 'Tuesday', etc.
             $dayName = $date->format('l');
-
-            // Find the doctor's schedule for that day
             $schedule = $schedules->firstWhere('day', $dayName);
 
             // If a schedule exists and is enabled, add the date
@@ -70,7 +61,7 @@ class BookingForm extends Component
     public function loadAvailableTimeSlots()
     {
         $date = Carbon::parse($this->selectedDate);
-        $dayName = $date->format('l'); // e.g., 'Monday'
+        $dayName = $date->format('l');
 
         $schedule = $this->doctor->work_schedules->firstWhere('day', $dayName);
 
@@ -89,7 +80,6 @@ class BookingForm extends Component
         while ($start->lt($end)) {
             $slot = $start->format('H:i');
 
-            // Check if within break
             if ($breakStart && $breakEnd && $start->between($breakStart, $breakEnd->subMinute())) {
                 $start->addMinutes(30);
                 continue;

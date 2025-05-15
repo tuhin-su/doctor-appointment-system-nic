@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\AppointmentsBooking;
 
 /**
  * Class User
@@ -53,6 +54,12 @@ class User extends Authenticatable
 		'remember_token',
 		'role'
 	];
+
+	public function appointmentsBooking()
+	{
+		return $this->hasMany(AppointmentsBooking::class, 'user_id');
+	}
+
 
 	public function doctors()
 	{

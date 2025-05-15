@@ -11,7 +11,7 @@ class Dashboard extends Component
 
     public function mount()
     {
-        $this->notifications = Auth::user()->notifications; // You can use `->unreadNotifications` if needed
+        $this->notifications = Auth::user()->notifications;
     }
 
     public function render()
