@@ -117,3 +117,8 @@ class User extends Authenticatable
             text: "Appointment cancelled successfully!",
         );
 ```
+
+## RUN SEEDER
+```php
+php artisan db:seed --class=UserSeeder
+```

@@ -94,11 +94,12 @@ class UserMaster extends Component
             ]);
         }
 
-        $this->dispatchBrowserEvent('alert', [
-            'type' => 'success',
-            'title' => 'Success',
-            'text' => 'User updated successfully!',
-        ]);
+        $this->dispatch(
+            "alert",
+            type: "success",
+            title: "Success",
+            text: "User updated successfully!",
+        );
 
         $this->closeEditForm();
         $this->loadUsers(); // Refresh users list

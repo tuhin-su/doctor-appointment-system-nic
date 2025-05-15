@@ -93,6 +93,13 @@ class DoctorAppointments extends Component
         return $d && $d->format('Y-m-d') === $date;
     }
 
+    public function completeAppointment($appointmentId){
+        $appointment = AppointmentsBooking::find($appointmentId);
+        $appointment->reschedule_status = 'completed';
+        $appointment->save();
+        $this->loadAppointments();
+    }
+
     public function render()
     {
         return view('livewire.doctor-appointments');

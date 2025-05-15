@@ -30,7 +30,7 @@
                             <div class="flex items-center gap-2">
                                 <i class="ri-stethoscope-line text-gray-500 text-xl"></i>
                                 <p class="text-gray-700 font-medium">
-                                    Dr. {{ $appointment->doctor->user->name }}
+                                    {{ $appointment->patientUser->name }}
                                 </p>
                             </div>
 
@@ -59,6 +59,12 @@
                             <button wire:click="rescheduleAppointment({{ $appointment->id }})"
                                 class="bg-yellow-100 text-yellow-700 hover:bg-yellow-200 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-1 transition">
                                 <i class="ri-calendar-check-line"></i> Reschedule
+                            </button>
+
+                            <!-- Confirm Button -->
+                             <button wire:click="completeAppointment({{ $appointment->id }})"
+                                class="bg-green-100 text-yellow-700 hover:bg-yellow-200 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-1 transition">
+                                <i class="ri-calendar-check-line"></i> Confirm
                             </button>
                         </div>
                     </div>
