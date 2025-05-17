@@ -64,7 +64,7 @@
                             <!-- Confirm Button -->
                              <button wire:click="completeAppointment({{ $appointment->id }})"
                                 class="bg-green-100 text-yellow-700 hover:bg-yellow-200 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-1 transition">
-                                <i class="ri-calendar-check-line"></i> Confirm
+                                <i class="ri-calendar-check-line"></i> Compile Appointments 
                             </button>
                         </div>
                     </div>
